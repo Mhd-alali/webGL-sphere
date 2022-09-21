@@ -1,6 +1,5 @@
-import './style.css';
-import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as THREE from 'three';
 import * as dat from 'dat.gui';
 import testVertexShader from './shaders/test/vertex.glsl';
 import testFragmentShader from './shaders/test/fragment.glsl';
@@ -30,7 +29,7 @@ const material = new THREE.ShaderMaterial({
     uniforms: {
         uTime: { value: 0.0 },
         uFrequency: { value: 3 },
-        uAmplitude: { value: 0.1 },
+        uAmplitude: { value: 0.03 },
         uSpeed: { value: 0.2 },
         uCursorX: { value: 0.0 },
         uCursorY: { value: 0.0 },
@@ -101,6 +100,7 @@ controls.enableDamping = true;
  */
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
+    antialias:true
 });
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));

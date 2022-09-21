@@ -1,5 +1,6 @@
 varying vec2 vUv;
-
+varying vec3 vNormal;
+varying mat3 vNormalMatrix;
 #define PI   3.1415926535897932384626433832795
 #define PI_2 1.57079632679489661923
 #define PI_4 0.785398163397448309616
@@ -19,6 +20,6 @@ vec2 rotate(vec2 uv, float rotation, vec2 mid) {
 }
 
 void main() {
-    float strength = vElevation + .5;
+    float strength =  vElevation + .5;
     gl_FragColor = vec4(strength, strength, strength, 1.0);
 }

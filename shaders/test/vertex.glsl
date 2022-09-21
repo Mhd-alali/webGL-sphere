@@ -4,8 +4,11 @@ uniform float uAmplitude;
 uniform float uSpeed;
 uniform float uCursorX;
 uniform float uCursorY;
+
 varying vec2 vUv;
 varying float vElevation;
+varying vec3 vNormal;
+varying mat3 vNormalMatrix;
 
 vec4 permute(vec4 x) {
   return mod(((x * 34.0) + 1.0) * x, 289.0);
@@ -153,27 +156,12 @@ float perlin4d(vec4 P) {
   float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
   return 2.2 * n_xyzw;
 }
-vec3 getDisplacedPosition(vec3 _position) {
-  vec3 distoredPosition = _position;
-  distoredPosition += perlin4d(vec4(distoredPosition * uFrequency + .5, uTime)) * uAmplitude;
-
-  float perlinStrength = perlin4d(vec4(distoredPosition * uFrequency + .5, uTime));
-
-  vec3 displacedPosition = _position;
-  displacedPosition += normalize(_position) * perlinStrength * uAmplitude;
-
-  return displacedPosition;
-}
 
 void main() {
-  vec3 displacementPosition = getDisplacedPosition(position);
-  vec4 modelPosition = modelMatrix * vec4(displacementPosition, 1.0);
-  float elevation = perlin4d(vec4(displacementPosition * uFrequency, (uTime + (uCursorX + uCursorY) * 3.) * uSpeed));
-  modelPosition.x += elevation * uAmplitude;
-  modelPosition.y += elevation * uAmplitude;
-  modelPosition.z += elevation * uAmplitude;
-  vec4 viewPosition = viewMatrix * modelPosition;
-  gl_Position = projectionMatrix * viewPosition;
+  float elevation = perlin4d(vec4(position * uFrequency,uTime * uSpeed));
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.);
   vUv = uv;
   vElevation = elevation;
+  vNormal = normal;
+  vNormalMatrix = normalMatrix;
 }
